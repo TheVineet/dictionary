@@ -1,0 +1,26 @@
+name: Build-dictionary-image
+
+on: [push]
+
+jobs:
+  build_docker_img:
+    runs-on: ubuntu-latest
+    env:
+      TAG: dictionary
+      PAT: ${{ secrets.GITHUB_TOKEN }}
+      USER: thevineet
+      REGISTRY: ghcr.io
+      VERSION: v1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    
+    - name: Build Docker Image
+      run: docker build -t $TAG .
+    
+    - name: Login to ghcr
+      run: |
+        echo $PAT | docker login ${{ env.REGISTRY}} -u $USER --password-stdin
+        docker tag $TAG ${{ env.REGISTRY }}/$USER/$TAG:${{ env.VERSION }}
+        docker push ${{ env.REGISTRY }}/$USER/$TAG:${{ env.VERSION }}
