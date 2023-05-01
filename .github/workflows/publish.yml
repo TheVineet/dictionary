@@ -1,4 +1,4 @@
-name: Build-dictionary-image
+name: Build-Dictionary-Image
 
 on: [push]
 
